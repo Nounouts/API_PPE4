@@ -1,6 +1,6 @@
 <?php
 //header('Content-Type: application/json');
-include 'bdd.php';
+require_once('bdd.php');
 
 
 if (!empty($_POST["id_user"])){

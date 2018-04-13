@@ -1,5 +1,5 @@
 <?php
-include 'bdd.php';
+require_once('bdd.php');
 
 
 $_POST['id_intervention'];
