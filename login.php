@@ -1,5 +1,5 @@
 <?php
-require_once('common.php');
+require_once('bdd.php');
 //verification de la présence des variables
 if(!isset($_POST['lastname']) || !isset($_POST['pwd'])){
  echo "";

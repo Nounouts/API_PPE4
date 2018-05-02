@@ -1,6 +1,6 @@
 <?php
 
-require_once('common.php');
+require_once('bdd.php');
 
 $id_inter = $_POST['id_intervention'];
 $report = $_POST['report'];
