@@ -9,13 +9,19 @@ if(empty($_POST["id_user"])){
 	return;
 }
 
-$request = $pdo->prepare("SELECT intervention.id, intervention.date, intervention.commentaire, intervention.etat_intervention, client.nom, client.prenom, client.adresse, client.ville, client.codepostal, client.telephone, client.entreprise FROM intervention , employe, client  WHERE intervention.id_employe = employe.id AND employe.id = :id_user AND client.id = intervention.id_client;");
 
-$request->bindParam(':id_user',$_POST["id_user"]);
+$requete = $db->prepare("SELECT interventions.id as id_inter, date_inter, time_inter, clients.firstname, clients.lastname, company, address1, address2, clients.zipcode, clients.city, clients.phone, motives.label as motive,  report, pending, duration
+                          from interventions
+                          inner join clients on clients.id = id_client
+                          inner join motives on motives.id = id_motive
+                          inner join employees on id_employee = employees.id
+                          where employees.lastname ='$lastname' and date_inter >= getdate()  order by pending, date_inter DESC ");
+
 
 $request->execute();
-echo 'test';
 $result=$request->fetchAll();
+
+
 $retour["nb"] = count($result);
 $retour["list_inter"] = $result;
 

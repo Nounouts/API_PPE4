@@ -1,35 +1,21 @@
 <?php
-//header('Content-Type: application/json');
-require_once('bdd.php');
-
-
-if (!empty($_POST["id_user"])){
-	//Preparation de la requete
-	$request = $pdo->prepare("SELECT id_user FROM employe WHERE id_user = :id_user");
-	//Mise en place des params
-	$request->bindParam(':id_user',$_POST["id_user"]);
-	//Execution de la requete
-	$request->execute();
-	//récupération du résultat
-	$response = $request->fetchAll();
-	//récupération du count
-	$count=count($response);
-
-	if($count>0){
-		$connexion="logintrue";
-		echo $connexion."\n";
-	}
-	else{
-		$connexion="loginfalse";
-		echo $connexion."\n";
-		header('http/1.1 401 Unauthorized');
-	}
+require_once('common.php');
+//verification de la présence des variables
+if(!isset($_POST['lastname']) || !isset($_POST['pwd'])){
+ echo "";
+ header('http/1.1 403 Forbiden');
+ return;
+}
+$lastname = $_POST['lastname'];
+$pwd= $_POST['pwd'];
+$requete = $db->prepare("SELECT * FROM employees WHERE lastname = :lastname and pwd = :pwd");
+$requete->execute([':lastname'=>$lastname, ':pwd'=>$pwd]);
+$count = count($requete->fetchAll());
+if ($count > 0){
+  echo "ok";
 }
 else{
-	echo"";
-	header('http/1.1 403 Forbidden');
+  echo "ko";
+  header('http/1.1 401 Unauthorized');
 }
-
-
-//echo json_encode($retour);
 ?>

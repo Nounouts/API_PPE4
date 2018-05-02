@@ -1,21 +1,19 @@
 <?php
-require_once('bdd.php');
 
+require_once('common.php');
 
-$_POST['id_intervention'];
-$_POST['commentaire'];
-$_POST['etat_intervention'];
+$id_inter = $_POST['id_intervention'];
+$report = $_POST['report'];
+$duration = $_POST['duration'];
 
-
-if (!empty($_POST['id_intervention']) && !empty($_POST['etat_intervention']) && !empty($_POST['commentaire'])) {
-	$request = $pdo->prepare("UPDATE intervention SET intervention.commentaire = :commentaire, intervention.etat_intervention = :etat_intervention WHERE intervention.id = :id_intervention");
-	$request->bindParam(':id_intervention',$_POST["id_intervention"]);
-		$request->bindParam(':commentaire',$_POST["commentaire"]);
-	$request->bindParam(':etat_intervention',$_POST["etat_intervention"]);
-	$request->execute();
+if(!isset($id_inter) || !isset($report) || !isset($duration) ){
+ 	echo "";
+ 	header('http/1.1 403 Forbiden');
+ 	return;
 }
-else{
-	echo"";
-	header('http/1.1 403 Forbidden');
-}
+
+// si l'intervention fini, on ajouter en base le temps et le rapport et on passe pending à 1
+$requete = $db->prepare("UPDATE interventions SET pending = 1, report ='$report', duration='$duration'  where id = '$id_inter'");
+$requete->execute();
+
 ?>
